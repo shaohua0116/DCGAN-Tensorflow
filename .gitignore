@@ -1,0 +1,13 @@
+train_dir/
+.ropeproject/
+datasets/mnist
+datasets/svhn
+datasets/cifar10
+datasets/fashion_mnist
+*.py[cod]
+*.sw[op]
+*.hy
+*.txt
+*.gz
+*.png
+*.gif
