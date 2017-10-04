@@ -27,6 +27,5 @@ for file in sorted(glob.glob(os.path.join(args.train_dir, "*.hy")), key=os.path.
     II.append(I)
 
 II = np.stack(II)
-print II.shape
-imageio.mimsave(args.output_file+'.gif', II, fps=3)
+imageio.mimsave(args.output_file+'.gif', II, fps=5)
 imageio.imwrite(args.output_file+'.png', I)

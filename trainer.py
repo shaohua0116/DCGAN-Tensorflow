@@ -2,11 +2,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-try:
-    import better_exceptions
-except ImportError:
-    pass
-
 from six.moves import xrange
 
 from util import log
@@ -18,9 +13,9 @@ from input_ops import create_input_ops
 
 import os
 import time
-import numpy as np
 import tensorflow as tf
 import h5py
+
 
 class Trainer(object):
 
@@ -69,10 +64,7 @@ class Trainer(object):
                 staircase=True,
                 name='decaying_learning_rate'
             )
-        # print all the trainable variables
-        #tf.contrib.slim.model_analyzer.analyze_vars(tf.trainable_variables(), print_info=True)
 
-        #self.check_op = tf.add_check_numerics_ops()
         self.check_op = tf.no_op()
 
         # --- checkpoint and monitoring ---
@@ -114,7 +106,7 @@ class Trainer(object):
 
         self.checkpoint_secs = 600  # 10 min
 
-        self.supervisor =  tf.train.Supervisor(
+        self.supervisor = tf.train.Supervisor(
             logdir=self.train_dir,
             is_chief=True,
             saver=None,
@@ -142,10 +134,9 @@ class Trainer(object):
         log.infov("Training Starts!")
         pprint(self.batch_train)
 
-        max_steps = 1000000
+        max_steps = 100000
 
         output_save_step = 1000
-        test_sample_step = 100
 
         for s in xrange(max_steps):
             step, summary, d_loss, g_loss, step_time, prediction_train, gt_train = \
@@ -212,6 +203,7 @@ class Trainer(object):
                          instance_per_sec = self.batch_size / step_time
                          )
                )
+
 
 def main():
     import argparse
