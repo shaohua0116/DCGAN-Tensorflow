@@ -102,6 +102,7 @@ class Trainer(object):
         self.summary_op = tf.summary.merge_all()
 
         self.saver = tf.train.Saver(max_to_keep=100)
+        self.pretrain_saver = tf.train.Saver(var_list=all_vars, max_to_keep=1)
         self.summary_writer = tf.summary.FileWriter(self.train_dir)
 
         self.checkpoint_secs = 600  # 10 min
