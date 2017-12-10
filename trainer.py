@@ -127,7 +127,7 @@ class Trainer(object):
         self.ckpt_path = config.checkpoint
         if self.ckpt_path is not None:
             log.info("Checkpoint path: %s", self.ckpt_path)
-            self.pretrain_saver.restore(self.session, self.ckpt_path)
+            self.saver.restore(self.session, self.ckpt_path)
             log.info("Loaded the pretrain parameters from the provided checkpoint path")
 
     def train(self):
@@ -162,14 +162,15 @@ class Trainer(object):
         fetch = [self.global_step, self.summary_op, self.model.d_loss, self.model.g_loss,
                  self.model.all_preds, self.model.all_targets, self.check_op]
 
-        if step%(self.config.update_rate+1) > 0:
-        # Train the generator
+        if step % (self.config.update_rate+1) > 0:
+            # Train the generator
             fetch.append(self.g_optimizer)
         else:
-        # Train the discriminator
+            # Train the discriminator
             fetch.append(self.d_optimizer)
 
-        fetch_values = self.session.run(fetch,
+        fetch_values = self.session.run(
+            fetch,
             feed_dict=self.model.get_feed_dict(batch_chunk, step=step)
         )
         [step, summary, d_loss, g_loss, all_preds, all_targets] = fetch_values[:6]
@@ -196,11 +197,11 @@ class Trainer(object):
                 "G loss: {g_loss:.5f} " +
                 "({sec_per_batch:.3f} sec/batch, {instance_per_sec:.3f} instances/sec) "
                 ).format(split_mode=(is_train and 'train' or 'val'),
-                         step = step,
-                         d_loss = d_loss,
-                         g_loss = g_loss,
-                         sec_per_batch = step_time,
-                         instance_per_sec = self.batch_size / step_time
+                         step=step,
+                         d_loss=d_loss,
+                         g_loss=g_loss,
+                         sec_per_batch=step_time,
+                         instance_per_sec=self.batch_size / step_time
                          )
                )
 
